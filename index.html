@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agent Loop Chat</title>
+  </head>
+  <body>
+    <div id="app">
+      <div class="container">
+        <div class="header">
+          <h1>Agent Loop Chat</h1>
+          <div class="api-key-section">
+            <input 
+              type="password" 
+              id="apiKey" 
+              placeholder="Enter your Anthropic API key" 
+              class="api-key-input"
+            />
+            <button id="saveKey" class="save-key-btn">Save Key</button>
+          </div>
+        </div>
+        
+        <div class="main-content">
+          <div class="chat-section">
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-input-section">
+              <input 
+                type="text" 
+                id="chatInput" 
+                placeholder="Type your message..." 
+                class="chat-input"
+                disabled
+              />
+              <button id="sendMessage" class="send-btn" disabled>Send</button>
+            </div>
+          </div>
+          
+          <div class="iframe-section">
+            <h3>Agent Output</h3>
+            <iframe id="agentOutput" class="agent-iframe"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

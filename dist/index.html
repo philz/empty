@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agent Loop Chat</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background-color: #f5f5f5;
+        color: #333;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .header {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+      }
+
+      .header h1 {
+        margin-bottom: 15px;
+        color: #2c3e50;
+      }
+
+      .api-key-section {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .api-key-input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+
+      .save-key-btn {
+        background: #3498db;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+      }
+
+      .save-key-btn:hover {
+        background: #2980b9;
+      }
+
+      .main-content {
+        display: flex;
+        gap: 20px;
+        flex: 1;
+        min-height: 0;
+      }
+
+      .chat-section {
+        flex: 1;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .chat-messages {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        border-bottom: 1px solid #eee;
+      }
+
+      .message {
+        margin-bottom: 15px;
+        padding: 10px;
+        border-radius: 8px;
+        max-width: 80%;
+        word-wrap: break-word;
+      }
+
+      .message.user {
+        background: #3498db;
+        color: white;
+        margin-left: auto;
+      }
+
+      .message.agent {
+        background: #ecf0f1;
+        color: #2c3e50;
+      }
+
+      .message.tool {
+        background: #f39c12;
+        color: white;
+        font-family: monospace;
+        font-size: 12px;
+        white-space: pre-wrap;
+      }
+
+      .chat-input-section {
+        padding: 20px;
+        display: flex;
+        gap: 10px;
+      }
+
+      .chat-input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+
+      .send-btn {
+        background: #27ae60;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+      }
+
+      .send-btn:hover:not(:disabled) {
+        background: #229954;
+      }
+
+      .send-btn:disabled {
+        background: #bdc3c7;
+        cursor: not-allowed;
+      }
+
+      .iframe-section {
+        flex: 1;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .iframe-section h3 {
+        margin-bottom: 15px;
+        color: #2c3e50;
+      }
+
+      .agent-iframe {
+        flex: 1;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        min-height: 400px;
+        width: 100%;
+      }
+
+      .error {
+        color: #e74c3c;
+        background: #fdf2f2;
+        border: 1px solid #f5c6cb;
+        padding: 10px;
+        border-radius: 4px;
+        margin: 10px 0;
+      }
+
+      .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 10px 20px;
+        border-radius: 4px;
+        color: white;
+        z-index: 1000;
+      }
+
+      .notification.success {
+        background: #27ae60;
+      }
+
+      .notification.error {
+        background: #e74c3c;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div class="container">
+        <div class="header">
+          <h1>Agent Loop Chat</h1>
+          <div class="api-key-section">
+            <input 
+              type="password" 
+              id="apiKey" 
+              placeholder="Enter your Anthropic API key" 
+              class="api-key-input"
+            />
+            <button id="saveKey" class="save-key-btn">Save Key</button>
+          </div>
+        </div>
+        
+        <div class="main-content">
+          <div class="chat-section">
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-input-section">
+              <input 
+                type="text" 
+                id="chatInput" 
+                placeholder="Type your message..." 
+                class="chat-input"
+                disabled
+              />
+              <button id="sendMessage" class="send-btn" disabled>Send</button>
+            </div>
+          </div>
+          
+          <div class="iframe-section">
+            <h3>Agent Output</h3>
+            <iframe id="agentOutput" class="agent-iframe"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
